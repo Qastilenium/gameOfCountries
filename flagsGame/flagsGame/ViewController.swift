@@ -11,6 +11,7 @@ class ViewController: UIViewController {
 
     var countries = ["estonia", "france", "germany", "ireland", "italy", "monaco", "nigeria", "poland", "russia", "spain", "uk", "us"]
     var score = 0
+    var questionsCounter = 0
     var correctAnswer = 0
     
     override func viewDidLoad() {
@@ -47,23 +48,37 @@ class ViewController: UIViewController {
         buttonMid.setImage(UIImage(named: countries[1]), for: .normal)
         buttonBot.setImage(UIImage(named: countries[2]), for: .normal)
         correctAnswer = Int.random(in: 0...2)
-        title = countries[correctAnswer].uppercased()
+        title = countries[correctAnswer].uppercased() + " | Score: \(score)"
     }
-
+    
+    func endOfGame(action: UIAlertAction! = nil) {
+        score = 0
+        questionsCounter = 0
+    }
+    
     @IBAction func buttonTapped(_ sender: UIButton) {
         var title: String
 
+        
         if sender.tag == correctAnswer {
             title = "Correct"
             score += 1
+            questionsCounter += 1
         } else {
             title = "Wrong"
-            score -= 1
+            if score != 0 { score -= 1 }
+            questionsCounter += 1
         }
-        
+        if questionsCounter == 10 {
+            let ac = UIAlertController(title: title, message: "Now the game is over. Your final score is \(score).", preferredStyle: .alert)
+            ac.addAction(UIAlertAction(title: "Okay", style: .destructive, handler: endOfGame))
+            present(ac, animated: true)
+        }
         let ac = UIAlertController(title: title, message: "Your score is \(score) now.", preferredStyle: .alert)
         ac.addAction(UIAlertAction(title: "Continue", style: .default, handler: gameLogic))
         present(ac, animated: true)
+        
+
     }
 }
 
