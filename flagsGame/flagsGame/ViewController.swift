@@ -22,8 +22,6 @@ class ViewController: UIViewController {
         gameLogic()
     }
     
-
-    
     // MARK: - Button
     @IBOutlet weak var buttonTop: UIButton!
     @IBOutlet weak var buttonMid: UIButton!
@@ -54,31 +52,30 @@ class ViewController: UIViewController {
     func endOfGame(action: UIAlertAction! = nil) {
         score = 0
         questionsCounter = 0
+        gameLogic()
     }
     
     @IBAction func buttonTapped(_ sender: UIButton) {
         var title: String
-
         
         if sender.tag == correctAnswer {
-            title = "Correct"
+            title = "Correct!"
             score += 1
             questionsCounter += 1
         } else {
-            title = "Wrong"
+            title = "Wrong! That's the flag of \(countries[sender.tag].uppercased())"
             if score != 0 { score -= 1 }
             questionsCounter += 1
         }
         if questionsCounter == 10 {
             let ac = UIAlertController(title: title, message: "Now the game is over. Your final score is \(score).", preferredStyle: .alert)
-            ac.addAction(UIAlertAction(title: "Okay", style: .destructive, handler: endOfGame))
+            ac.addAction(UIAlertAction(title: "Okay, play again!", style: .destructive, handler: endOfGame))
             present(ac, animated: true)
         }
+        
         let ac = UIAlertController(title: title, message: "Your score is \(score) now.", preferredStyle: .alert)
         ac.addAction(UIAlertAction(title: "Continue", style: .default, handler: gameLogic))
         present(ac, animated: true)
-        
-
     }
 }
 
